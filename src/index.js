@@ -1,14 +1,39 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import Main from "./Main";
+
+class TestDo extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: "hello test!"
+        };
+        this.handleChangeValue = this.handleChangeValue.bind(this)
+    }
+
+    handleChangeValue(event) {
+        this.setState({
+            value: event.target.value
+        });
+    }
+
+    render() {
+        var value = this.state.value
+        return <div>
+            <input type="text" value={value} onChange={this.handleChangeValue}/>
+            <h1>{value}</h1>
+        </div>
+    }
+}
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+    <React.StrictMode>
+        <Main/>
+
+    </React.StrictMode>,
+    document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function
