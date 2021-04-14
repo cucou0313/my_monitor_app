@@ -1,5 +1,6 @@
 import React from 'react';
 import * as echarts from 'echarts';
+import Divider from "@material-ui/core/Divider";
 
 
 class Linechart extends React.Component {
@@ -152,11 +153,11 @@ class Linechart extends React.Component {
         return (
             <div>
                 <div id="form1" style={{ height: '350px'}}/>
-                <br/>
+                <Divider />
                 <div id="form2" style={{height: '350px'}}/>
-                <br/>
+                <Divider />
                 <div id="form3" style={{height: '350px'}}/>
-                <br/>
+                <Divider />
                 <div id="form4" style={{height: '350px'}}/>
             </div>
         )
