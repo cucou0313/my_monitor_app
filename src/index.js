@@ -4,30 +4,6 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import Main from "./Main";
 
-class TestDo extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: "hello test!"
-        };
-        this.handleChangeValue = this.handleChangeValue.bind(this)
-    }
-
-    handleChangeValue(event) {
-        this.setState({
-            value: event.target.value
-        });
-    }
-
-    render() {
-        var value = this.state.value
-        return <div>
-            <input type="text" value={value} onChange={this.handleChangeValue}/>
-            <h1>{value}</h1>
-        </div>
-    }
-}
-
 ReactDOM.render(
     <React.StrictMode>
         <Main/>
