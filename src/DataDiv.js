@@ -44,7 +44,7 @@ class DataDiv extends React.Component {
                     <MyButton variant="contained" startIcon={<Repeat/>} color="blue"
                               onClick={this.UpDateChart}>更新</MyButton>
                 </div>
-                <Linechart id="123" name="charts demo1" url="/res/get" ref={r => this.chart = r}/>
+                <Linechart ref={r => this.chart = r}/>
             </React.Fragment>
         )
     }

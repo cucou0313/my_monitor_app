@@ -28,7 +28,7 @@ class Linechart extends React.Component {
         this.myChart3.showLoading()
         this.myChart4.showLoading()
 
-        fetch(this.props.url, {
+        fetch("http://localhost:10000/res/get", {
             method: 'GET'
         }).then(res => {
             if (res.ok)
@@ -152,12 +152,12 @@ class Linechart extends React.Component {
     render() {
         return (
             <div>
-                <div id="form1" style={{ height: '350px'}}/>
-                <Divider />
+                <div id="form1" style={{height: '350px'}}/>
+                <Divider/>
                 <div id="form2" style={{height: '350px'}}/>
-                <Divider />
+                <Divider/>
                 <div id="form3" style={{height: '350px'}}/>
-                <Divider />
+                <Divider/>
                 <div id="form4" style={{height: '350px'}}/>
             </div>
         )
