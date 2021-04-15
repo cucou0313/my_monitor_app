@@ -45,7 +45,8 @@ class MyTask extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            ips: []
+            ips: [],
+            expands: {}
         }
     }
 
@@ -63,7 +64,7 @@ class MyTask extends React.Component {
                         if (data.Code === 0) {
                             console.log(data)
                             this.setState({
-                                ips: data.Data
+                                ips: data.Data,
                             })
                         }
                     }
@@ -71,23 +72,12 @@ class MyTask extends React.Component {
         })
     }
 
-    getTask(ip) { //请求该终端任务信息
-        console.log(ip)
-        // fetch("http://" + ip + ":10000/conn/get_all_ip", {
-        //     method: 'GET'
-        // }).then(res => {
-        //     if (res.ok)
-        //         res.json().then(
-        //             data => {
-        //                 if (data.Code === 0) {
-        //                     console.log(data)
-        //                     this.setState({
-        //                         ips: data.Data
-        //                     })
-        //                 }
-        //             }
-        //         )
-        // })
+    changeExpand(ip) { //折叠状态
+        let expands=this.state.expands
+        expands[ip] = !expands[ip]
+        this.setState({
+            expands: expands
+        })
     }
 
     render() {
@@ -125,23 +115,44 @@ class MyTask extends React.Component {
                 <Typography variant="h4" noWrap>
                     在线终端
                 </Typography>
+                <Divider/>
                 {/*动态生成list*/}
                 {this.state.ips.map((text, index) => (
-                    <List>
-                        <ListItem button key={text} onClick={this.getTask.bind(this, text)}>
+                    <List key="mylist">
+                        <ListItem button onClick={this.changeExpand.bind(this, text)}>
                             <ListItemIcon>
                                 <Computer/>
                             </ListItemIcon>
                             <ListItemText primary={text} secondary='Secondary text'/>
-                            <ListItemSecondaryAction>
-                                {1 ? <ExpandLess/> : <ExpandMore/>}
-                            </ListItemSecondaryAction>
+                                {this.state.expands[text] ? <ExpandLess/> : <ExpandMore/>}
                         </ListItem>
-                        <Collapse in={1} timeout="auto" unmountOnExit>
+                        <Collapse in={this.state.expands[text]} timeout="auto" unmountOnExit>
                             <TaskList ip={text}/>
+                            <Divider/>
                         </Collapse>
                     </List>
                 ))}
+
+                {/*<List component="div" disablePadding>*/}
+                {/*    <ListItem button onClick={this.changeExpand.bind(this, "1")}>*/}
+                {/*        <ListItemIcon>*/}
+                {/*            <Computer/>*/}
+                {/*        </ListItemIcon>*/}
+                {/*        <ListItemText primary="test" secondary='Secondary text'/>*/}
+                {/*            {this.state.expands["1"] ? <ExpandLess/> : <ExpandMore/>}*/}
+                {/*    </ListItem>*/}
+                {/*    <Collapse in={this.state.expands["1"]} timeout="auto" unmountOnExit>*/}
+                {/*        <ListItem button>*/}
+                {/*            <ListItemText primary="test"/>*/}
+                {/*            <ListItemSecondaryAction>*/}
+                {/*                <IconButton edge="end" aria-label="delete">*/}
+                {/*                    <DeleteIcon/>*/}
+                {/*                </IconButton>*/}
+                {/*            </ListItemSecondaryAction>*/}
+                {/*        </ListItem>*/}
+                {/*        <Divider/>*/}
+                {/*    </Collapse>*/}
+                {/*</List>*/}
             </Drawer>
         )
     }

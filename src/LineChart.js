@@ -74,9 +74,11 @@ class Linechart extends React.Component {
                 containLabel: true
             },
             toolbox: {
+                right: '5%',
                 feature: {
                     saveAsImage: {
                         show: true,
+
                         title: '保存为图片'
                     }
                 }
