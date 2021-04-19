@@ -3,9 +3,6 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import IconButton from '@material-ui/core/IconButton';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import DeleteIcon from '@material-ui/icons/Delete';
 import Computer from '@material-ui/icons/Computer';
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
@@ -16,7 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import Collapse from "@material-ui/core/Collapse";
 import TaskList from "./TaskList";
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 const useStyles = theme => ({
     root: {
         display: 'flex',
@@ -39,6 +36,9 @@ const useStyles = theme => ({
         backgroundColor: theme.palette.background.default,
         padding: theme.spacing(3),
     },
+    inline: {
+        display: 'inline',
+    },
 })
 
 class MyTask extends React.Component {
@@ -46,7 +46,8 @@ class MyTask extends React.Component {
         super(props);
         this.state = {
             ips: [],
-            expands: {}
+            expands: {},
+            secondText: {}
         }
     }
 
@@ -73,34 +74,24 @@ class MyTask extends React.Component {
     }
 
     changeExpand(ip) { //折叠状态
-        let expands=this.state.expands
-        expands[ip] = !expands[ip]
+        let newStatus = !this.state.expands[ip]
         this.setState({
-            expands: expands
+            expands: {...this.state.expands, [ip]: newStatus}
         })
+    }
+
+    updateSecondText(ip, text) {
+        this.setState({
+            secondText: {...this.state.secondText, [ip]: text}
+        })
+    }
+
+    upChart(name,id){
+        this.props.funChart(name,id)
     }
 
     render() {
         const {classes} = this.props;
-
-        // let l = (
-        //     <List>
-        //         {this.state.ips.map((text, index) => (
-        //             <ListItem button key={text} onClick={this.getIps.bind(this, text)}>
-        //                 <ListItemIcon>
-        //                     <Computer/>
-        //                 </ListItemIcon>
-        //                 <ListItemText primary={text}/>
-        //                 <ListItemSecondaryAction>
-        //                     <IconButton edge="end" aria-label="delete">
-        //                         <DeleteIcon/>
-        //                     </IconButton>
-        //                 </ListItemSecondaryAction>
-        //                 {this.state.open ? <ExpandLess/> : <ExpandMore/>}
-        //             </ListItem>
-        //         ))}
-        //     </List>
-        // )
 
         return (
             <Drawer
@@ -118,41 +109,26 @@ class MyTask extends React.Component {
                 <Divider/>
                 {/*动态生成list*/}
                 {this.state.ips.map((text, index) => (
-                    <List key="mylist">
+                    <List key={"mylist" + text}>
                         <ListItem button onClick={this.changeExpand.bind(this, text)}>
                             <ListItemIcon>
                                 <Computer/>
                             </ListItemIcon>
-                            <ListItemText primary={text} secondary='Secondary text'/>
-                                {this.state.expands[text] ? <ExpandLess/> : <ExpandMore/>}
+                            <ListItemText primary={text} secondary={
+                                <React.Fragment>
+                                    <Typography dangerouslySetInnerHTML={{__html: this.state.secondText[text]}}>
+
+                                    </Typography>
+                                </React.Fragment>
+                            }/>
+                            {this.state.expands[text] ? <ExpandLess/> : <ExpandMore/>}
                         </ListItem>
                         <Collapse in={this.state.expands[text]} timeout="auto" unmountOnExit>
-                            <TaskList ip={text}/>
+                            <TaskList ip={text} func={this.updateSecondText.bind(this)}  func2={this.upChart.bind(this)}/>
                             <Divider/>
                         </Collapse>
                     </List>
                 ))}
-
-                {/*<List component="div" disablePadding>*/}
-                {/*    <ListItem button onClick={this.changeExpand.bind(this, "1")}>*/}
-                {/*        <ListItemIcon>*/}
-                {/*            <Computer/>*/}
-                {/*        </ListItemIcon>*/}
-                {/*        <ListItemText primary="test" secondary='Secondary text'/>*/}
-                {/*            {this.state.expands["1"] ? <ExpandLess/> : <ExpandMore/>}*/}
-                {/*    </ListItem>*/}
-                {/*    <Collapse in={this.state.expands["1"]} timeout="auto" unmountOnExit>*/}
-                {/*        <ListItem button>*/}
-                {/*            <ListItemText primary="test"/>*/}
-                {/*            <ListItemSecondaryAction>*/}
-                {/*                <IconButton edge="end" aria-label="delete">*/}
-                {/*                    <DeleteIcon/>*/}
-                {/*                </IconButton>*/}
-                {/*            </ListItemSecondaryAction>*/}
-                {/*        </ListItem>*/}
-                {/*        <Divider/>*/}
-                {/*    </Collapse>*/}
-                {/*</List>*/}
             </Drawer>
         )
     }

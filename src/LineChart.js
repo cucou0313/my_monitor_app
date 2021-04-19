@@ -22,13 +22,19 @@ class Linechart extends React.Component {
         this.chart()
     }
 
-    getData() { //请求数据函数
+    getAllData(name, id) { //请求所有数据函数
         this.myChart1.showLoading()
         this.myChart2.showLoading()
         this.myChart3.showLoading()
         this.myChart4.showLoading()
 
-        fetch("http://localhost:10000/res/get", {
+        let url = ""
+        if (id === "") {
+            url = "get_all"
+        } else {
+            url = "get_one?name=" + name + "&id=" + id
+        }
+        fetch("http://localhost:10000/res/" + url, {
             method: 'GET'
         }).then(res => {
             if (res.ok)
@@ -55,7 +61,6 @@ class Linechart extends React.Component {
                 )
         })
     }
-
 
     getOption(data) {
         return {
