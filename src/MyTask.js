@@ -1,6 +1,7 @@
 import React from 'react';
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
+import Tooltip from '@material-ui/core/Tooltip';
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Computer from '@material-ui/icons/Computer';
@@ -47,6 +48,7 @@ class MyTask extends React.Component {
         this.state = {
             ips: [],
             expands: {},
+            toolTipText: {},
             secondText: {}
         }
     }
@@ -80,14 +82,15 @@ class MyTask extends React.Component {
         })
     }
 
-    updateSecondText(ip, text) {
+    updateSecondText(ip, toolTipText, secondText) {
         this.setState({
-            secondText: {...this.state.secondText, [ip]: text}
+            toolTipText: {...this.state.toolTipText, [ip]: toolTipText},
+            secondText: {...this.state.secondText, [ip]: secondText}
         })
     }
 
-    upChart(name,id){
-        this.props.funChart(name,id)
+    upChart(name, id) {
+        this.props.funChart(name, id)
     }
 
     render() {
@@ -111,20 +114,22 @@ class MyTask extends React.Component {
                 {this.state.ips.map((text, index) => (
                     <List key={"mylist" + text}>
                         <ListItem button onClick={this.changeExpand.bind(this, text)}>
-                            <ListItemIcon>
-                                <Computer/>
-                            </ListItemIcon>
+                            <Tooltip title={<span style={{whiteSpace: 'pre-line', fontSize:'14px'}}>{this.state.toolTipText[text]}</span>}>
+                                <ListItemIcon>
+                                    <Computer/>
+                                </ListItemIcon>
+                            </Tooltip>
                             <ListItemText primary={text} secondary={
                                 <React.Fragment>
                                     <Typography dangerouslySetInnerHTML={{__html: this.state.secondText[text]}}>
-
                                     </Typography>
                                 </React.Fragment>
                             }/>
                             {this.state.expands[text] ? <ExpandLess/> : <ExpandMore/>}
                         </ListItem>
                         <Collapse in={this.state.expands[text]} timeout="auto" unmountOnExit>
-                            <TaskList ip={text} func={this.updateSecondText.bind(this)}  func2={this.upChart.bind(this)}/>
+                            <TaskList ip={text} func={this.updateSecondText.bind(this)}
+                                      func2={this.upChart.bind(this)}/>
                             <Divider/>
                         </Collapse>
                     </List>

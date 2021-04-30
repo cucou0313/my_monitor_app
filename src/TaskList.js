@@ -1,5 +1,6 @@
 import React from 'react';
 import {withStyles} from '@material-ui/core/styles';
+import Tooltip from '@material-ui/core/Tooltip';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -68,7 +69,14 @@ class TaskList extends React.Component {
                                 taskStatus: data.taskStatus
                             })
                             //更新父组件信息
-                            this.props.func(this.props.ip, "任务:" + data.runCount + "<br/>" + data.totalCount)
+                            let toolTipText = "1、主机名:" + data.SysInfo.hostname + "\n" +
+                                "2、启动时间:" + data.SysInfo.bootTime + "\n" +
+                                "3、系统类型:" + data.SysInfo.os + "\n" +
+                                "4、当前运行进程数:" + data.SysInfo.procs + "\n" +
+                                "5、系统信息:" + data.SysInfo.platform + "|" + data.SysInfo.platformFamily + "|" + data.SysInfo.platformVersion + "\n" +
+                                "6、CPU:" + data.SysInfo.kernelArch + "|" + data.CoreCount + "核心|" + data.LogicalCoreCount + "线程\n"
+                            let secondText = "运行任务:" + data.runCount + "/" + data.totalCount
+                            this.props.func(this.props.ip, toolTipText, secondText)
                         } else {
                             this.setState({
                                 alertType: "error",
@@ -235,21 +243,25 @@ class TaskList extends React.Component {
                 <ListItem button className={classes.nested} onClick={this.updateChart.bind(this, "", "")}>
                     <ListItemText primary="加载运行的任务数据"/>
                     <ListItemSecondaryAction>
-                        <IconButton edge="end" aria-label="delete">
-                            <DeleteSweepRoundedIcon/>
-                        </IconButton>
+                        <Tooltip title="是否自动刷新数据">
+                            <Switch
+                                edge="end"
+                            />
+                        </Tooltip>
                     </ListItemSecondaryAction>
                 </ListItem>
 
                 <ListItem button className={classes.nested}>
                     <ListItemText primary="系统收集"/>
                     <ListItemSecondaryAction>
+                        <Tooltip title="是否收集系统信息">
                         <Switch
                             checked={this.state.CollectSysInfo}
                             onChange={this.sysSwitchChange.bind(this)}
                             inputProps={{'aria-label': 'secondary checkbox'}}
                             edge="end"
                         />
+                        </Tooltip>
                     </ListItemSecondaryAction>
                 </ListItem>
 
